@@ -8,5 +8,8 @@ const recipes = [
 exports.recipes = recipes;
 
 exports.seed = function(knex) {
-  return knex('recipes').insert(recipes)
+  return knex('recipes').truncate()
+    .then(() => {
+      return knex('recipes').insert(recipes)
+    });
 };

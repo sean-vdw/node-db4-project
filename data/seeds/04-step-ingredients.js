@@ -17,5 +17,8 @@ const step_ingredients = [
 exports.step_ingredients = step_ingredients
 
 exports.seed = function(knex) {
-  return knex('step_ingredients').insert(step_ingredients)
+  return knex('step_ingredients').truncate()
+    .then(() => {
+      return knex('step_ingredients').insert(step_ingredients)
+    });
 };

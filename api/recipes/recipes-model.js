@@ -31,6 +31,7 @@ async function getById(recipe_id) {
   const result = {
     recipe_id: rows[0].recipe_id,
     recipe_name: rows[0].recipe_name,
+    created_at: rows[0].created_at,
     steps: rows[0].step_id
       ? rows.map(row => ({ step_id: row.step_id, step_number: row.step_number, instructions: row.step_instructions}))
       : []

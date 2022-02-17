@@ -6,7 +6,7 @@ exports.up = function(knex) {
       tbl.string('recipe_name', 128)
         .unique()
         .notNullable();
-      tbl.timestamp('created_at', { useTz: true });
+      tbl.timestamp('created_at').defaultTo(knex.fn.now());
     })
     .createTable('ingredients', tbl => {
       tbl.increments('ingredient_id');

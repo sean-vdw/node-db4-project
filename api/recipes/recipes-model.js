@@ -23,8 +23,20 @@ function getAll() {
 
 async function getById(recipe_id) {
   const rows = await db('recipes as r')
-    .leftJoin('steps as st')
-}
+    .leftJoin('steps as s', 's.recipe_id', '=', 'r.recipe_id')
+    .where('r.recipe_id', recipe_id)
+    .select('s.*', 'r.*')
+    .orderBy('s.step_number');
+
+  const result = {
+    recipe_id: rows[0].recipe_id,
+    recipe_name: rows[0].recipe_name,
+    steps: rows[0].step_id
+      ? rows.map(row => ({ step_id: row.step_id, step_number: row.step_number, instructions: row.step_instructions}))
+      : []
+  };
+  return result;
+};
 
 
 module.exports = {

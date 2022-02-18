@@ -24,8 +24,9 @@ function getAll() {
 async function getById(recipe_id) {
   const rows = await db('recipes as r')
     .leftJoin('steps as s', 's.recipe_id', '=', 'r.recipe_id')
+    .join('step_ingredients as si', 's.step_id', '=', 'si.step_id')
     .where('r.recipe_id', recipe_id)
-    .select('s.*', 'r.*')
+    .select('s.*', 'r.*', 'si.*')
     .orderBy('s.step_number');
 
   const result = {
@@ -33,9 +34,14 @@ async function getById(recipe_id) {
     recipe_name: rows[0].recipe_name,
     created_at: rows[0].created_at,
     steps: rows[0].step_id
-      ? rows.map(row => ({ step_id: row.step_id, step_number: row.step_number, instructions: row.step_instructions}))
+      ? rows.map(row => ({ step_id: row.step_id, step_number: row.step_number, instructions: row.step_instructions, 
+        ingredients: [
+          { ingredient_id: row.ingredient_id, ingredient_name: row.ingredient_name, quantity: row.ingredient_quantity },
+        ]
+        }))
       : []
   };
+  console.log(rows.map(row => ({ step_id: row.step_id, ingredient: row.ingredient_name })));
   return result;
 };
 
